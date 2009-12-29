@@ -14,7 +14,7 @@
 		<title>Biskwy</title>
 		<systemChrome>standard</systemChrome>
 		<transparent>false</transparent>
-		<visible>true</visible>
+		<visible>false</visible>
 	</initialWindow>
 	<installFolder>Example Company/Example Application</installFolder>
 	<programMenuFolder>Example Company/Example Application</programMenuFolder>
