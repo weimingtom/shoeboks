@@ -29,29 +29,29 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package org.shoebox.biskwy.commands.tools {
-	import org.shoebox.biskwy.apps.TilesApp;
-	import org.shoebox.biskwy.core.Main;
-	import org.shoebox.biskwy.items.GridTile;
+package org.shoebox.biskwy.services {
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 
 	/**
-	 * org.shoebox.biskwy.commands.tools.ToolRectFill
+	 * Service to obtains the list of all the tiles registered for the project
+	* 
+	*  
+	* org.shoebox.biskwy.services.SCats
 	* @author shoebox
 	*/
-	public class ToolRectFill extends ATool implements ICommand , ISingleton{
-		protected var _bSPACE		:Boolean;
+	public class SCats extends SQLLiteService implements ICommand , ISingleton {
 		
-		protected static var __instance		:ToolRectFill = null;
+		protected static var __instance		:SCats;
 		
 		// -------o constructor
 		
-			public function ToolRectFill( e : SingletonEnforcer ) : void {
+			public function SCats( e : SingletonEnforcer ) : void {
+				super();
+				request = 'SELECT DISTINCT cat FROM TilesDB';
 			}
 
 		// -------o public
@@ -62,23 +62,23 @@ package org.shoebox.biskwy.commands.tools {
 			* @param 
 			* @return
 			*/
-			static public function getInstance() : ToolRectFill {
+			static public function getInstance() : SCats {
 				
 				if(!__instance)
-					__instance = new ToolRectFill(new SingletonEnforcer());
-				
+					__instance = new SCats(new SingletonEnforcer());
+					
 				return __instance;
-			}
+			}	
+			
 			
 			/**
-			* onExecute function
+			* onCall function
 			* @public
 			* @param 
 			* @return
 			*/
 			final override public function onExecute( e : Event = null ) : void {
-				
-				map.addEventListener(MouseEvent.MOUSE_OVER , 	_onEvent , true , 10 , true );				map.addEventListener(MouseEvent.CLICK , 		_onEvent , true , 10 , true );
+				super.onExecute();
 			}
 			
 			/**
@@ -88,73 +88,20 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onCancel( e : Event = null ) : void {
-				__instance = null;
-				_bISRUNNING = false;
-				Main.MAP.out();
-				map.removeEventListener(MouseEvent.MOUSE_OVER , _onEvent , true );
-				map.removeEventListener(MouseEvent.CLICK , 	_onEvent , true );
+				super.onCancel();
 			}
 			
 		// -------o protected
-
-			/**
-			* 
-			*
-			* @param 
-			* @return
-			*/
-			protected function _onEvent( e : Event ) : void {
-				
-				var o : GridTile = e.target as GridTile;
-				var v : Vector.<GridTile> = _getTiles(o.position.x , o.position.y , 2);
-				Main.MAP.out();
-				switch(e.type){
-					
-					case MouseEvent.MOUSE_OVER:
-						v.forEach( _over);
-						break;
-						
-					case MouseEvent.CLICK:
-						v.forEach(_fill);
-						break;
-					
-				}
-				
-			}
 			
-			/**
-			* Highlight on roll of the specified grild tile
-			*
-			* @param	g : Grid tile	(GridTile)
-			* @param	u : Position in to the vector (uint)
-			* @param	v : source vector	(Vector.<GridTile>) 
-			* @return	void
-			*/
-			protected function _over( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
-				g.over();
-			}
-			
-			/**
-			* On click fill the tile with the selected ID in to the Tiles App 
-			*
-			* @param	g : Grid tile	(GridTile)
-			* @param	u : Position in to the vector (uint)
-			* @param	v : source vector	(Vector.<GridTile>) 
-			* @return	void
-			*/
-			protected function _fill( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
-				g.container.fill( TilesApp.selected );		
-			}
-			
-			
-
 		// -------o misc
 
 			public static function trc(arguments : *) : void {
-				Logger.log(ToolRectFill, arguments);
+				Logger.log(SCats, arguments);
 			}
 	}
 }
+
+
 internal class SingletonEnforcer{
 
 }
