@@ -766,7 +766,7 @@ package fl.controls {
          * @langversion 3.0
          * @playerversion Flash 9.0.28.0
 		 */
-		protected function setEmbedFont() {
+		protected function setEmbedFont():void {
 			var embed:Object = getStyleValue("embedFonts");
 			if (embed != null) {
 				textField.embedFonts = embed;

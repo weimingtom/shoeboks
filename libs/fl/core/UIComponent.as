@@ -1261,7 +1261,7 @@ package fl.core {
          * @langversion 3.0
          * @playerversion Flash 9.0.28.0
          */
-		protected function setIMEMode(enabled:Boolean) {
+		protected function setIMEMode(enabled:Boolean):void {
 			if(_imeMode != null) {
 				if(enabled) {
 					IME.enabled = true;

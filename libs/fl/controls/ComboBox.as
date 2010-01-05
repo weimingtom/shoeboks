@@ -1598,7 +1598,7 @@ package fl.controls {
 		 */
 		override protected function draw():void {
 			// Fix the selectedIndex before redraw.
-			var _selectedIndex = selectedIndex;
+			var _selectedIndex:int = selectedIndex;
 			
 			// Check if index is -1, and it is allowed.
 			if (_selectedIndex == -1 && (prompt != null || editable || length == 0)) {
@@ -1827,7 +1827,7 @@ package fl.controls {
 			}
 			
 			editableValue = null;
-			var startIndex = selectedIndex;
+			var startIndex:int = selectedIndex;
 			selectedIndex = event.target.listData.index;
 			
 			if (startIndex != selectedIndex) {
@@ -1880,7 +1880,7 @@ package fl.controls {
          * @langversion 3.0
          * @playerversion Flash 9.0.28.0
 		 */
-		private function addCloseListener(event:Event) {
+		private function addCloseListener(event:Event) : void {
 			removeEventListener(Event.ENTER_FRAME, addCloseListener);
 			if (!isOpen) { return; }
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageClick, false, 0, true);

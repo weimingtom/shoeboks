@@ -2,12 +2,12 @@
 <!-- AIR Application Descriptor File. See http://www.adobe.com/go/learn_air_1.0_application_descriptor_en. -->
 	<id>Biskwy</id>
 	<name>Biskwy</name>
-	<version>0.1</version>
-	<filename>Biskwy</filename>
+	<version>0.1.1</version>
+	<filename>Biskwy Map editor</filename>
 	<description>
 		<text xml:lang="en">Biskwy map editor</text>		
 	</description>
-	<copyright>Copyright 2008, Example Co., Inc.</copyright>
+	<copyright>©shoebox</copyright>
 	<initialWindow>
 		<content>main.swf</content>
 		<title>Biskwy</title>
@@ -21,8 +21,8 @@
 		<height>400</height>
 		<x>150</x>
 		<y>150</y>
-		<minSize>800 600</minSize>
-		<maxSize>3800 3800</maxSize>
+		<minSize>300 300</minSize>
+		<maxSize>800 800</maxSize>
 	</initialWindow>
 	<installFolder>Biskwy</installFolder>
 	<programMenuFolder>Biskwy</programMenuFolder>

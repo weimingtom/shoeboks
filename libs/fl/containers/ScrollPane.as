@@ -1,23 +1,21 @@
 ﻿// Copyright 2007. Adobe Systems Incorporated. All Rights Reserved.
 package fl.containers {
-
 	import fl.containers.BaseScrollPane;
-	import fl.controls.ScrollBar;
 	import fl.controls.ScrollPolicy;
 	import fl.core.InvalidationType;
-	import fl.core.UIComponent;
 	import fl.events.ScrollEvent;
 	import fl.managers.IFocusManagerComponent;
+
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
+	import flash.events.IOErrorEvent;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.events.IOErrorEvent;
-	import flash.events.HTTPStatusEvent;
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
@@ -545,7 +543,7 @@ package fl.containers {
 			
 			currentContent = getDisplayObjectInstance(value);
 			if (currentContent != null) {
-				var child = contentClip.addChild(currentContent as DisplayObject);
+				var child: DisplayObject = contentClip.addChild(currentContent as DisplayObject);
 				dispatchEvent(new Event(Event.INIT));
 				update();
 			} else {
@@ -597,7 +595,7 @@ package fl.containers {
          * @playerversion Flash 9.0.28.0
          */
 		override protected function setVerticalScrollPosition(scrollPos:Number, fireEvent:Boolean=false):void {
-			var contentScrollRect = contentClip.scrollRect;
+			var contentScrollRect:Rectangle = contentClip.scrollRect;
 			contentScrollRect.y = scrollPos;
 			contentClip.scrollRect = contentScrollRect;
 		}
@@ -609,7 +607,7 @@ package fl.containers {
          * @playerversion Flash 9.0.28.0
          */
 		override protected function setHorizontalScrollPosition(scrollPos:Number, fireEvent:Boolean=false):void {
-			var contentScrollRect = contentClip.scrollRect;
+			var contentScrollRect:Rectangle = contentClip.scrollRect;
 			contentScrollRect.x = scrollPos;
 			contentClip.scrollRect = contentScrollRect;
 		}
@@ -639,7 +637,7 @@ package fl.containers {
 			
 			//Need to reset the sizes, for scrolling purposes.
 			//Just reset the scrollbars, don't redraw the entire pane.
-			var availableHeight = calculateAvailableHeight();
+			var availableHeight : Number = calculateAvailableHeight();
 			calculateAvailableSize();
 			horizontalScrollBar.setScrollProperties(availableWidth, 0, (useFixedHorizontalScrolling) ? _maxHorizontalScrollPosition : contentWidth - availableWidth, availableWidth);
 			verticalScrollBar.setScrollProperties(availableHeight, 0, contentHeight - availableHeight, availableHeight);
@@ -734,11 +732,11 @@ package fl.containers {
          * @playerversion Flash 9.0.28.0
          */
 		protected function doDrag(event:MouseEvent):void {
-			var yPos = scrollDragVPos-(mouseY-yOffset);
+			var yPos:Number = scrollDragVPos-(mouseY-yOffset);
 			_verticalScrollBar.setScrollPosition(yPos);
 			setVerticalScrollPosition(_verticalScrollBar.scrollPosition,true);
 			
-			var xPos = scrollDragHPos-(mouseX-xOffset);
+			var xPos:Number = scrollDragHPos-(mouseX-xOffset);
 			_horizontalScrollBar.setScrollPosition(xPos);
 			setHorizontalScrollPosition(_horizontalScrollBar.scrollPosition,true);
 		}

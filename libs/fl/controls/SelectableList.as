@@ -798,7 +798,7 @@ package fl.controls {
 		 */
 		public function itemToCellRenderer(item:Object):ICellRenderer {
 			if(item != null) {
-				for(var index in activeCellRenderers) {
+				for(var index:* in activeCellRenderers) {
 					var renderer:ICellRenderer = activeCellRenderers[index] as ICellRenderer;
 					if(renderer.data == item) {
 						return renderer;

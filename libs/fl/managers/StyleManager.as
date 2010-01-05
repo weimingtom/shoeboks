@@ -100,7 +100,7 @@ package fl.managers {
          * @langversion 3.0
          * @playerversion Flash 9.0.28.0
 		 */
-		private static function getInstance() {
+		private static function getInstance() : StyleManager{
 			if (_instance == null) { _instance = new StyleManager(); }
 			return _instance;
 		}
