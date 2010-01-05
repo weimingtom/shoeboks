@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+	name="AIR Compile"
+	basedir="."
+	default="AIR">
+
+
+	<property
+		name="OPTIMIZE"
+		value="true" />
+	<property
+		name="DEBUG"
+		value="false" />
+
+	<property
+		name="FLEX_HOME"
+		value="C:/Program Files (x86)/Adobe/Adobe Flash Builder Beta 2/sdks/4.0.0/" />
+
+	<property
+		name="src.dir"
+		value="./src" />
+	<property
+		name="lib.dir"
+		value="../libs" />
+	<property
+		name="out.dir"
+		value="./bin-deploy" />
+	
+	<property
+		name="jars.dir"
+		value="../../jars-server" />
+
+	<taskdef
+		resource="flexTasks.tasks"
+		classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+
+	<target
+		name="AIR"
+		description="Create the AIR package for our app">
+		<exec
+			executable="${FLEX_HOME}/bin/adt.bat"
+			failonerror="true">
+			<arg line="-package" />
+			<arg line="-storetype pkcs12" />
+			<arg line="-keystore C:/Users/shoebox/Contacts/Desktop/shoeboxair.p12" />
+			<arg line="-storepass shoebox" />
+			<arg line="${out.dir}/biskwy.air" />
+			<arg line="${out.dir}/main-app.xml" />
+			<arg line="-C ${out.dir} main.swf" />
+			<arg line="-C ${out.dir} assets.swf" />
+			<!-- 
+			<arg line="-C ${out.dir} NitroEncryptedModulesDemo.swf" />
+			<arg line="-C ${out.dir} CircleModule.swf" />
+			<arg line="-C ${out.dir} TechSupportRequest.swf" />
+			<arg line="-C ${out.dir} assets*" />
+			 -->
+		</exec>
+	</target>
+</project>
