@@ -44,7 +44,8 @@ package org.shoebox.biskwy.items {
 			* @return
 			*/
 			public function over( e : MouseEvent ) : void {
-				DisplayFuncs.setColor(_shBACK , 0xCCCCCC);
+				if(mouseEnabled)
+					DisplayFuncs.setColor(_shBACK , 0xCCCCCC);
 			}
 			
 			/**
@@ -54,7 +55,22 @@ package org.shoebox.biskwy.items {
 			* @return
 			*/
 			public function out( e : MouseEvent ) : void {
-				_shBACK.transform.colorTransform = new ColorTransform();
+				if(mouseEnabled)
+					_shBACK.transform.colorTransform = new ColorTransform();
+			}
+			
+			/**
+			* freeze function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function freeze( b : Boolean ) : void {
+				mouseEnabled = !b;
+				if(b)
+					DisplayFuncs.setColor(_shBACK , 0x6ab6f3 );
+				else
+					_shBACK.transform.colorTransform = new ColorTransform();
 			}
 				
 			/**
