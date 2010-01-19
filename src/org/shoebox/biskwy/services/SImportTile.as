@@ -1,6 +1,5 @@
 package org.shoebox.biskwy.services {
-	import org.shoebox.patterns.commands.ICommand;
-	import org.shoebox.patterns.singleton.ISingleton;
+	import org.shoebox.patterns.service.IService;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
@@ -13,7 +12,7 @@ package org.shoebox.biskwy.services {
 	* org.shoebox.biskwy.services.SImportTile
 	* @author shoebox
 	*/
-	public class SImportTile extends SQLLiteService implements ICommand {
+	public class SImportTile extends SQLLiteService implements IService {
 		
 		protected var _oFILE			:File;
 		
@@ -42,8 +41,8 @@ package org.shoebox.biskwy.services {
 			* @param 
 			* @return
 			*/
-			final override public function onExecute( e : Event = null ) : void {
-				
+			final override public function onCall( ) : void {
+				trc('onCall ::: '+_oFILE);
 				_oFILE.addEventListener(Event.COMPLETE , _onLoad , false , 10 , true);
 				_oFILE.load();
 			}
@@ -54,8 +53,8 @@ package org.shoebox.biskwy.services {
 			* @param 
 			* @return
 			*/
-			final override public function onCancel( e : Event = null ) : void {
-				super.onCancel();
+			final override public function onRefresh( ) : void {
+				
 			}
 			
 		// -------o protected
@@ -68,11 +67,11 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			protected function _onLoad( e : Event ) : void {
-				
+				trc('onLoad');
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
 				request = 'INSERT INTO TilesDB (name,filepath,walkable,active,cat , media) VALUES ("'+_oFILE.name+'","'+_oFILE.nativePath+'",true,false,"none",:byteArray)';
 				addParameter(':byteArray' , _oFILE.data);
-				super.onExecute();
+				super.onCall();
 			}				
 			
 		// -------o misc

@@ -37,11 +37,11 @@ package org.shoebox.biskwy.commands.menu {
 	import org.shoebox.biskwy.windows.content.CtntNewProject;
 	import org.shoebox.patterns.commands.AbstractCommand;
 	import org.shoebox.patterns.commands.ICommand;
-	import org.shoebox.patterns.singleton.ISingleton;
+	import org.shoebox.patterns.service.ServiceEvent;
+	import org.shoebox.patterns.service.ServiceFactory;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
-	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 
 	/**
@@ -50,7 +50,7 @@ package org.shoebox.biskwy.commands.menu {
 	*/
 	public class CommandOpenMap extends AbstractCommand implements ICommand {
 		
-		protected var _oCONTENT	:CtntNewProject;
+		protected var _oCONTENT		:CtntNewProject;
 		protected var _oBASE		:Database;
 		protected var _oFILE		:File;
 		protected var _oWINDOW		:NewProjectWindow;
@@ -70,11 +70,10 @@ package org.shoebox.biskwy.commands.menu {
 			*/
 			override public function onExecute( e : Event = null ) : void {
 				trc('openMap ::: '+AppMaps.selectedID);
-				//onComplete();
 				
-				var 	o : SGetMap = SGetMap.getInstance();
-					o.addEventListener( SQLEvent.RESULT , _onResults , false , 10 , true );
-					o.execute();
+				var 	o : SGetMap = ServiceFactory.getService(SGetMap) as SGetMap;
+					o.addEventListener( ServiceEvent.ON_DATAS , _onResults , false , 10 , true );
+					o.call();
 			}
 			
 			/**
@@ -96,7 +95,7 @@ package org.shoebox.biskwy.commands.menu {
 			* @param 
 			* @return
 			*/
-			protected function _onResults( e : SQLEvent ) : void {
+			protected function _onResults( e : ServiceEvent ) : void {
 				trc('onResult');
 				onComplete();
 			}

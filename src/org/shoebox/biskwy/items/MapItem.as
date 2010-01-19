@@ -101,6 +101,7 @@ package org.shoebox.biskwy.items {
 			* @return
 			*/
 			public function set id( u : uint ) : void {
+				trc('set id ::: '+u);
 				_uID = u;
 			}
 			

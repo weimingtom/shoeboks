@@ -30,12 +30,9 @@
 */
 
 package org.shoebox.biskwy.services {
-	import org.shoebox.biskwy.services.SQLLiteService;
-	import org.shoebox.patterns.commands.ICommand;
-	import org.shoebox.patterns.singleton.ISingleton;
+	import org.shoebox.patterns.service.IService;
 	import org.shoebox.utils.logger.Logger;
 
-	import flash.events.Event;
 	import flash.utils.ByteArray;
 
 	/**
@@ -45,7 +42,7 @@ package org.shoebox.biskwy.services {
 	* org.shoebox.biskwy.services.SMapUpdate
 	* @author shoebox
 	*/
-	public class SMapUpdate extends SQLLiteService implements ICommand  {
+	public class SMapUpdate extends SQLLiteService implements IService  {
 		
 		protected var _bDATAS		:ByteArray;
 		protected var _uID		:uint;
@@ -84,11 +81,10 @@ package org.shoebox.biskwy.services {
 			* @param 
 			* @return
 			*/
-			final override public function onExecute( e : Event = null ) : void {
+			final override public function onCall( ) : void {
 				request = 'UPDATE TB_Maps SET data=:datas WHERE id=:id';
 				addParameter(':datas',_bDATAS);				addParameter(':id',_uID);
-				trc('onExecute ::: '+request);
-				super.onExecute();
+				super.onCall();
 			}
 			
 			/**
@@ -97,8 +93,8 @@ package org.shoebox.biskwy.services {
 			* @param 
 			* @return
 			*/
-			final override public function onCancel( e : Event = null ) : void {
-				super.onCancel();
+			final override public function onRefresh( ) : void {
+				super.onRefresh();
 			}
 			
 		// -------o protected

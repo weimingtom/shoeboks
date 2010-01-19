@@ -30,11 +30,7 @@
 */
 
 package org.shoebox.biskwy.services {
-	import org.shoebox.patterns.commands.ICommand;
-	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
-
-	import flash.events.Event;
 
 	/**
 	 * Service to obtains the list of all the tiles registered for the project
@@ -43,53 +39,18 @@ package org.shoebox.biskwy.services {
 	* org.shoebox.biskwy.services.SCats
 	* @author shoebox
 	*/
-	public class SCats extends SQLLiteService implements ICommand , ISingleton {
+	public class SCats extends SQLLiteService {
 		
 		protected static var __instance		:SCats;
 		
 		// -------o constructor
 		
-			public function SCats( e : SingletonEnforcer ) : void {
+			public function SCats( ) : void {
 				super();
 				request = 'SELECT DISTINCT cat FROM TilesDB';
 			}
 
 		// -------o public
-			
-			/**
-			* getInstance function
-			* @public
-			* @param 
-			* @return
-			*/
-			static public function getInstance() : SCats {
-				
-				if(!__instance)
-					__instance = new SCats(new SingletonEnforcer());
-					
-				return __instance;
-			}	
-			
-			
-			/**
-			* onCall function
-			* @public
-			* @param 
-			* @return
-			*/
-			final override public function onExecute( e : Event = null ) : void {
-				super.onExecute();
-			}
-			
-			/**
-			* onCancel function
-			* @public
-			* @param 
-			* @return
-			*/
-			final override public function onCancel( e : Event = null ) : void {
-				super.onCancel();
-			}
 			
 		// -------o protected
 			
@@ -99,9 +60,4 @@ package org.shoebox.biskwy.services {
 				Logger.log(SCats, arguments);
 			}
 	}
-}
-
-
-internal class SingletonEnforcer{
-
 }

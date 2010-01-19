@@ -31,11 +31,9 @@
 
 package org.shoebox.biskwy.services {
 	import org.shoebox.biskwy.apps.AppMaps;
-	import org.shoebox.patterns.commands.ICommand;
+	import org.shoebox.patterns.service.IService;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
-
-	import flash.events.Event;
 
 	/**
 	 * Service to obtains the list of all the tiles registered for the project
@@ -44,32 +42,17 @@ package org.shoebox.biskwy.services {
 	* org.shoebox.biskwy.services.SGetMap
 	* @author shoebox
 	*/
-	public class SGetMap extends SQLLiteService implements ICommand , ISingleton {
+	public class SGetMap extends SQLLiteService implements IService , ISingleton {
 		
 		protected static var __instance		:SGetMap;
 		
 		// -------o constructor
 		
-			public function SGetMap( e : SingletonEnforcer ) : void {
+			public function SGetMap( ) : void {
 				super();				
 			}
 
 		// -------o public
-			
-			/**
-			* getInstance function
-			* @public
-			* @param 
-			* @return
-			*/
-			static public function getInstance() : SGetMap {
-				
-				if(!__instance)
-					__instance = new SGetMap(new SingletonEnforcer());
-					
-				return __instance;
-			}	
-			
 			
 			/**
 			* onCall function
@@ -77,20 +60,20 @@ package org.shoebox.biskwy.services {
 			* @param 
 			* @return
 			*/
-			final override public function onExecute( e : Event = null ) : void {
+			final override public function onCall( ) : void {
 				request = 'SELECT * FROM TB_Maps WHERE id='+AppMaps.selectedID;
-				trc('onExecute ::: '+request);
-				super.onExecute();
+				trc('onCall ::: '+request);
+				super.onCall();
 			}
 			
 			/**
-			* onCancel function
+			* onRefresh function
 			* @public
 			* @param 
 			* @return
 			*/
-			final override public function onCancel( e : Event = null ) : void {
-				super.onCancel();
+			final override public function onRefresh() : void {
+			
 			}
 			
 		// -------o protected
@@ -103,7 +86,3 @@ package org.shoebox.biskwy.services {
 	}
 }
 
-
-internal class SingletonEnforcer{
-
-}
