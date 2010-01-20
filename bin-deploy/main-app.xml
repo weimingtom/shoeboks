@@ -2,7 +2,7 @@
 <!-- AIR Application Descriptor File. See http://www.adobe.com/go/learn_air_1.0_application_descriptor_en. -->
 	<id>Biskwy</id>
 	<name>Biskwy</name>
-	<version>0.2</version>
+	<version>0.3</version>
 	<filename>Biskwy</filename>
 	<description>
 		<text xml:lang="en">Biskwy map editor</text>		
