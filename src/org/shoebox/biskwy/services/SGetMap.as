@@ -30,7 +30,6 @@
 */
 
 package org.shoebox.biskwy.services {
-	import org.shoebox.biskwy.apps.AppMaps;
 	import org.shoebox.patterns.service.IService;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
@@ -46,6 +45,8 @@ package org.shoebox.biskwy.services {
 		
 		protected static var __instance		:SGetMap;
 		
+		protected var _uMAPID		:uint;
+		
 		// -------o constructor
 		
 			public function SGetMap( ) : void {
@@ -55,13 +56,33 @@ package org.shoebox.biskwy.services {
 		// -------o public
 			
 			/**
+			* get mapID function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function get mapID() : uint {
+				return _uMAPID;
+			}
+			
+			/**
+			* set mapID function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function set mapID( u : uint ) : void {
+				_uMAPID = u;
+			}
+			
+			/**
 			* onCall function
 			* @public
 			* @param 
 			* @return
 			*/
 			final override public function onCall( ) : void {
-				request = 'SELECT * FROM TB_Maps WHERE id='+AppMaps.selectedID;
+				request = 'SELECT * FROM TB_Maps WHERE id='+_uMAPID;
 				trc('onCall ::: '+request);
 				super.onCall();
 			}

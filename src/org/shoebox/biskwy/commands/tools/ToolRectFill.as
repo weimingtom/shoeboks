@@ -30,31 +30,71 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
-	import org.shoebox.biskwy.apps.TilesApp;
-	import org.shoebox.biskwy.core.Main;
+	import fl.data.DataProvider;
+
+	import org.shoebox.biskwy.events.GridTileEvent;
 	import org.shoebox.biskwy.items.GridTile;
+	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 
 	/**
 	 * org.shoebox.biskwy.commands.tools.ToolRectFill
 	* @author shoebox
 	*/
 	public class ToolRectFill extends ATool implements ICommand , ISingleton{
+		
 		protected var _bSPACE		:Boolean;
+		protected var _sSHAPE		:String;
 		
 		protected static var __instance		:ToolRectFill = null;
 		
 		// -------o constructor
 		
 			public function ToolRectFill( e : SingletonEnforcer ) : void {
+			
+				/*
+				var 	oDP : DataProvider = new DataProvider();
+					oDP.addItem( {label : 'Rectangle'} );					oDP.addItem( {label : 'Circle'} );
+			 
+				addProperty(ATool.P_STEPPER, 		{ label : 'Size' } , 'size');
+				addProperty(ATool.P_COMBOBOX , 	{ label : 'shape' } , 'shape' , oDP);				addProperty( ATool.P_CHECKBOX , 	{ label : 'Replace content' } , 'replace');
+				*/
 			}
 
 		// -------o public
+			
+			/**
+			* redraw function
+			* @public
+			* @param 
+			* @return
+			*/
+			final override public function redraw() : void {
+				
+			}
+			
+			/**
+			* Setter of the tool shape
+			* @public	
+			* @param 	s : tool shape (String)	
+			* @return	void
+			*/
+			public function set shape ( s : String ) : void {
+				_sSHAPE = s;
+			}
+			
+			/**
+			* Getter of the tool shape
+			* @public
+			* @return tool shape (String)
+			*/
+			public function get shape() : String {
+				return _sSHAPE;
+			}
 			
 			/**
 			* getInstance function
@@ -78,7 +118,8 @@ package org.shoebox.biskwy.commands.tools {
 			*/
 			final override public function onExecute( e : Event = null ) : void {
 				
-				map.addEventListener(MouseEvent.MOUSE_OVER , 	_onEvent , true , 10 , true );				map.addEventListener(MouseEvent.CLICK , 		_onEvent , true , 10 , true );
+				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_OVER, _onEvent , false , 10 , true );				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_CLICK, _onEvent , false , 10 , true);
+				
 			}
 			
 			/**
@@ -88,11 +129,11 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onCancel( e : Event = null ) : void {
-				__instance = null;
 				_bISRUNNING = false;
-				Main.MAP.out();
-				map.removeEventListener(MouseEvent.MOUSE_OVER , _onEvent , true );
-				map.removeEventListener(MouseEvent.CLICK , 	_onEvent , true );
+				_bISCANCEL = false;
+				map.out();
+				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_OVER, _onEvent , false );
+				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onEvent , false );
 			}
 			
 		// -------o protected
@@ -103,18 +144,20 @@ package org.shoebox.biskwy.commands.tools {
 			* @param 
 			* @return
 			*/
-			protected function _onEvent( e : Event ) : void {
-				
-				var o : GridTile = e.target as GridTile;
-				var v : Vector.<GridTile> = _getTiles(o.position.x , o.position.y , 2);
-				Main.MAP.out();
+			protected function _onEvent( e : GridTileEvent ) : void {
+				trc('onEvent ::: '+e.gridTile);
+				if(!e.gridTile)
+					return;
+				var v : Vector.<GridTile> = _getTiles(e.gridTile.position.x , e.gridTile.position.y, size);
+				if(map)
+					map.out();
 				switch(e.type){
 					
-					case MouseEvent.MOUSE_OVER:
+					case GridTileEvent.GRIDTILE_OVER:
 						v.forEach( _over);
 						break;
 						
-					case MouseEvent.CLICK:
+					case GridTileEvent.GRIDTILE_CLICK:
 						v.forEach(_fill);
 						break;
 					
@@ -143,7 +186,9 @@ package org.shoebox.biskwy.commands.tools {
 			* @return	void
 			*/
 			protected function _fill( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
-				g.container.fill( TilesApp.selected );		
+				if(_bREPLACE)
+					g.clear();
+				g.container.fill( _oTILEDESC );		
 			}
 			
 			

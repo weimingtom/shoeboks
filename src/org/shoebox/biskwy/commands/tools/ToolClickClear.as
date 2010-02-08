@@ -30,13 +30,13 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
-	import org.shoebox.biskwy.items.GridTile;
+	import org.shoebox.biskwy.events.GridTileEvent;
+	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 
 	/**
 	 * org.shoebox.biskwy.commands.tools.ToolClickClear
@@ -74,8 +74,7 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onExecute( e : Event = null ) : void {
-				trc('onExecute ::: '+map);
-				map.addEventListener(MouseEvent.CLICK , _onClick , true , 10 , true);
+				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false , 10 , true );
 			}
 			
 			/**
@@ -85,8 +84,7 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onCancel( e : Event = null ) : void {
-				trc('onCancel');
-				map.removeEventListener(MouseEvent.CLICK , _onClick , true);
+				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false );
 				__instance = null;
 				_bISRUNNING = false;
 			}
@@ -99,8 +97,8 @@ package org.shoebox.biskwy.commands.tools {
 			* @param 
 			* @return
 			*/
-			protected function _onClick( e : MouseEvent ) : void {
-				(e.target as GridTile).clear();						
+			protected function _onClick( e : GridTileEvent ) : void {
+				e.gridTile.clear();						
 			}
 
 		// -------o misc

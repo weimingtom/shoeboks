@@ -30,7 +30,6 @@
 */
 
 package org.shoebox.biskwy.commands.menu {
-	import org.shoebox.biskwy.apps.AppMaps;
 	import org.shoebox.biskwy.core.Database;
 	import org.shoebox.biskwy.services.SGetMap;
 	import org.shoebox.biskwy.windows.NewProjectWindow;
@@ -62,6 +61,17 @@ package org.shoebox.biskwy.commands.menu {
 			}
 
 		// -------o public
+		
+			/**
+			* set mapID function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function set mapID( u : uint ) : void {
+				_uMAPID = u;
+			}
+		
 			/**
 			* onExecute function
 			* @public
@@ -69,9 +79,10 @@ package org.shoebox.biskwy.commands.menu {
 			* @return
 			*/
 			override public function onExecute( e : Event = null ) : void {
-				trc('openMap ::: '+AppMaps.selectedID);
+				trc('openMap ::: '+_uMAPID);
 				
 				var 	o : SGetMap = ServiceFactory.getService(SGetMap) as SGetMap;
+					o.mapID = _uMAPID;
 					o.addEventListener( ServiceEvent.ON_DATAS , _onResults , false , 10 , true );
 					o.call();
 			}

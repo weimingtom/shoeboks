@@ -30,9 +30,8 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
-	import org.shoebox.biskwy.apps.AppTileContent;
-	import org.shoebox.biskwy.apps.TilesApp;
-	import org.shoebox.biskwy.items.GridTile;
+	import org.shoebox.biskwy.events.GridTileEvent;
+	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
@@ -76,8 +75,7 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onExecute( e : Event = null ) : void {
-				trc('onExecute ::: '+map);
-				map.addEventListener(MouseEvent.CLICK , _onClick , true , 10 , true);
+				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false , 10 , true );
 			}
 			
 			/**
@@ -87,10 +85,10 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onCancel( e : Event = null ) : void {
-				trc('onCancel');
-				map.removeEventListener(MouseEvent.CLICK , _onClick , true);
-				__instance = null;
+				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false );
+				EventCentral.getInstance().dispatchEvent( new GridTileEvent( GridTileEvent.GRIDTILE_EDITEND , null) );
 				_bISRUNNING = false;
+				_bISCANCEL = false;
 			}
 			
 		// -------o protected
@@ -101,8 +99,8 @@ package org.shoebox.biskwy.commands.tools {
 			* @param 
 			* @return
 			*/
-			protected function _onClick( e : MouseEvent ) : void {
-				AppTileContent.getInstance().target = (e.target as GridTile);								
+			protected function _onClick( e : GridTileEvent ) : void {
+				EventCentral.getInstance().dispatchEvent( new GridTileEvent( GridTileEvent.GRIDTILE_EDIT , e.gridTile) );								
 			}
 
 		// -------o misc
