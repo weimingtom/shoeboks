@@ -37,7 +37,6 @@ package org.shoebox.biskwy.commands.tools {
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 
 	/**
 	 * org.shoebox.biskwy.commands.tools.ToolClickEdit

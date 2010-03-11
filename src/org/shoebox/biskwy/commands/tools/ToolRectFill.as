@@ -30,8 +30,6 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
-	import fl.data.DataProvider;
-
 	import org.shoebox.biskwy.events.GridTileEvent;
 	import org.shoebox.biskwy.items.GridTile;
 	import org.shoebox.events.EventCentral;
@@ -131,7 +129,8 @@ package org.shoebox.biskwy.commands.tools {
 			final override public function onCancel( e : Event = null ) : void {
 				_bISRUNNING = false;
 				_bISCANCEL = false;
-				map.out();
+				if(map)
+					map.out();
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_OVER, _onEvent , false );
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onEvent , false );
 			}

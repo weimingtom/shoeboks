@@ -1,13 +1,11 @@
 package org.shoebox.biskwy.items {
-
-
 	import org.shoebox.display.DisplayFuncs;
 	import org.shoebox.display.text.TextFormatter;
 	import org.shoebox.patterns.commands.samples.IMouseOut;
 	import org.shoebox.patterns.commands.samples.IMouseOver;
 	import org.shoebox.patterns.factory.Factory;
 	import org.shoebox.utils.logger.Logger;
-	
+
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -15,7 +13,7 @@ package org.shoebox.biskwy.items {
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormatAlign;
-	
+
 	/**
 	* org.shoebox.biskwy.views.MapItem
 	* @author shoebox
