@@ -30,6 +30,7 @@
 */
 
 package org.shoebox.biskwy.commands.menu {
+	import org.shoebox.biskwy.commands.CommandProgress;
 	import org.shoebox.biskwy.core.Database;
 	import org.shoebox.biskwy.services.SGetMap;
 	import org.shoebox.biskwy.windows.NewProjectWindow;
@@ -80,6 +81,8 @@ package org.shoebox.biskwy.commands.menu {
 			*/
 			override public function onExecute( e : Event = null ) : void {
 				trc('openMap ::: '+_uMAPID);
+				
+				CommandProgress.getInstance().execute();
 				
 				var 	o : SGetMap = ServiceFactory.getService(SGetMap) as SGetMap;
 					o.mapID = _uMAPID;
