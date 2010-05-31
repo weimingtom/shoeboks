@@ -70,7 +70,7 @@ package org.shoebox.biskwy.services {
 			protected function _onLoad( e : Event ) : void {
 				trc('onLoad');
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
-				request = 'INSERT INTO TilesDB (name,filepath,collide,active,cat , media) VALUES ("'+_oFILE.name+'","'+_oFILE.nativePath+'",true,false,"none",:byteArray)';
+				request = 'INSERT INTO TilesDB (name,filepath,ground,collide,active,cat , media) VALUES ("'+_oFILE.name+'","'+_oFILE.nativePath+'",true,false,false,"none",:byteArray)';
 				addParameter(':byteArray' , _oFILE.data);
 				super.onCall();
 			}				

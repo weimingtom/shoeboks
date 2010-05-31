@@ -30,8 +30,10 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
+	import org.shoebox.biskwy.core.variables.CurrentMap;
 	import org.shoebox.biskwy.events.GridTileEvent;
 	import org.shoebox.biskwy.items.GridTile;
+	import org.shoebox.biskwy.items.TileLayer;
 	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
@@ -45,7 +47,7 @@ package org.shoebox.biskwy.commands.tools {
 	*/
 	public class ToolRectFill extends ATool implements ICommand , ISingleton{
 		
-		protected var _bSPACE		:Boolean;
+		protected var _bINHERITZ	:Boolean;		protected var _bSPACE		:Boolean;
 		protected var _sSHAPE		:String;
 		
 		protected static var __instance		:ToolRectFill = null;
@@ -58,10 +60,10 @@ package org.shoebox.biskwy.commands.tools {
 				var 	oDP : DataProvider = new DataProvider();
 					oDP.addItem( {label : 'Rectangle'} );					oDP.addItem( {label : 'Circle'} );
 			 
-				addProperty(ATool.P_STEPPER, 		{ label : 'Size' } , 'size');
-				addProperty(ATool.P_COMBOBOX , 	{ label : 'shape' } , 'shape' , oDP);				addProperty( ATool.P_CHECKBOX , 	{ label : 'Replace content' } , 'replace');
-				*/
-			}
+				addProperty(ATool.P_COMBOBOX , 	{ label : 'shape' } , 'shape' , oDP);
+				*/				addProperty( ATool.P_STEPPER, 	{ label : 'Size' } , 'size');
+				addProperty( ATool.P_CHECKBOX , 	{ label : 'Replace content' } , 'replace');
+				addProperty( ATool.P_CHECKBOX , 	{ label : 'Inherit Z decal' } , 'inheritZ' );			}
 
 		// -------o public
 			
@@ -73,6 +75,26 @@ package org.shoebox.biskwy.commands.tools {
 			*/
 			final override public function redraw() : void {
 				
+			}
+			
+			/**
+			* set inheritZ function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function set inheritZ( b : Boolean ) : void {
+				_bINHERITZ = b;
+			}
+			
+			/**
+			* get inheritZ function
+			* @public
+			* @param 
+			* @return
+			*/
+			public function get inheritZ() : Boolean {
+				return _bINHERITZ;
 			}
 			
 			/**
@@ -129,8 +151,10 @@ package org.shoebox.biskwy.commands.tools {
 			final override public function onCancel( e : Event = null ) : void {
 				_bISRUNNING = false;
 				_bISCANCEL = false;
-				if(map)
-					map.out();
+				
+				if(CurrentMap)
+					CurrentMap.out();
+					
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_OVER, _onEvent , false );
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onEvent , false );
 			}
@@ -148,8 +172,8 @@ package org.shoebox.biskwy.commands.tools {
 				if(!e.gridTile)
 					return;
 				var v : Vector.<GridTile> = _getTiles(e.gridTile.position.x , e.gridTile.position.y, size);
-				if(map)
-					map.out();
+				if(CurrentMap)
+					CurrentMap.out();
 				switch(e.type){
 					
 					case GridTileEvent.GRIDTILE_OVER:
@@ -187,7 +211,27 @@ package org.shoebox.biskwy.commands.tools {
 			protected function _fill( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
 				if(_bREPLACE)
 					g.clear();
-				g.container.fill( _oTILEDESC );		
+				
+				var 	l : uint = g.container.layers.length;
+				
+				if( multiSelectionLen > 0){
+					
+					var uID : uint = Math.random() * multiSelectionLen;
+					
+					if(inheritZ && g.container.layers.length > 0)
+						g.container.fill( multiSelection[uID] , (g.container.layers[l-1] as TileLayer).decalZ , true);					else
+						g.container.fill( multiSelection[uID] );
+				
+				}else if(_oTILEDESC){
+					
+					if(inheritZ)
+						g.container.fill( _oTILEDESC , (g.container.layers[l-1] as TileLayer).decalZ , true);
+					else
+						g.container.fill( _oTILEDESC );
+					
+				}
+				
+						
 			}
 			
 			
