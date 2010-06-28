@@ -30,9 +30,14 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
+	import org.shoebox.biskwy.controllers.CTileContent;
 	import org.shoebox.biskwy.events.GridTileEvent;
+	import org.shoebox.biskwy.models.MTileContent;
+	import org.shoebox.biskwy.views.VTileContent;
+	import org.shoebox.biskwy.windows.EditWindow;
 	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
+	import org.shoebox.patterns.mvc.commands.MVCCommand;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
@@ -44,11 +49,15 @@ package org.shoebox.biskwy.commands.tools {
 	*/
 	public class ToolClickEdit extends ATool implements ICommand , ISingleton{
 		
+		protected var _oWINDOW				:EditWindow;
+		protected var _oMVC				:MVCCommand;
+		
 		protected static var __instance		:ToolClickEdit = null;
 		
 		// -------o constructor
 		
 			public function ToolClickEdit( e : SingletonEnforcer ) : void {
+				
 			}
 
 		// -------o public
@@ -74,6 +83,17 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onExecute( e : Event = null ) : void {
+				
+				
+				//
+					_oWINDOW = new EditWindow();
+					_oWINDOW.activate();
+					
+				//
+					_oMVC = new MVCCommand( { modelClass : MTileContent , viewClass : VTileContent , controllerClass : CTileContent } );
+					_oMVC.container = _oWINDOW.stage;
+					_oMVC.execute();
+				
 				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false , 10 , true );
 			}
 			
@@ -84,8 +104,15 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			final override public function onCancel( e : Event = null ) : void {
+				
+				if( _oMVC )
+					_oMVC.cancel();
+				
+				_oWINDOW.close();
+				
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false );
 				EventCentral.getInstance().dispatchEvent( new GridTileEvent( GridTileEvent.GRIDTILE_EDITEND , null) );
+				
 				_bISRUNNING = false;
 				_bISCANCEL = false;
 			}

@@ -116,11 +116,11 @@ package org.shoebox.biskwy.items {
 				//
 					_shBACK = new Shape();
 					_shBACK.graphics.beginFill( (id%2==0) ? 0xEAEAEA : 0xFAFAFA );
-					_shBACK.graphics.drawRect(0,0,230,30);
+					_shBACK.graphics.drawRect(0,0,270,30);
 					addChild( _shBACK );
 					
 				//
-					_tfNAME = Factory.build( TextField , { text : _oDATAS.name , width : 210 , x : 10 , y : 5} );
+					_tfNAME = Factory.build( TextField , { text : _oDATAS.name , width : 250 , x : 10 , y : 5} );
 					addChild(_tfNAME);
 					TextFormatter.apply(_tfNAME,10,'Verdana',TextFormatAlign.LEFT,TextFieldAutoSize.NONE);
 				

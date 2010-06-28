@@ -1,9 +1,9 @@
 package org.shoebox.engine.core.variables {
-	import flash.display.Sprite;
+	import flash.display.MovieClip;
 	
 	/**
 	 * @author shoe[box]
 	 */
-	public var Container : Sprite;
+	public var Container : MovieClip;
 	
 }

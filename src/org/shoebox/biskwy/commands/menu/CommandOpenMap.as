@@ -31,95 +31,142 @@
 
 package org.shoebox.biskwy.commands.menu {
 	import org.shoebox.biskwy.commands.CommandProgress;
+	import org.shoebox.biskwy.controllers.CMaps;
 	import org.shoebox.biskwy.core.Database;
+	import org.shoebox.biskwy.core.Facade;
+	import org.shoebox.biskwy.models.MMaps;
 	import org.shoebox.biskwy.services.SGetMap;
-	import org.shoebox.biskwy.windows.NewProjectWindow;
+	import org.shoebox.biskwy.views.VMaps;
+	import org.shoebox.biskwy.windows.MapsWindow;
 	import org.shoebox.biskwy.windows.content.CtntNewProject;
 	import org.shoebox.patterns.commands.AbstractCommand;
 	import org.shoebox.patterns.commands.ICommand;
+	import org.shoebox.patterns.mvc.commands.MVCCommand;
 	import org.shoebox.patterns.service.ServiceEvent;
 	import org.shoebox.patterns.service.ServiceFactory;
+	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
 	import flash.events.Event;
 	import flash.filesystem.File;
 
 	/**
-	 * org.shoebox.biskwy.commands.menu.CommandOpenMap
+	* Open a map if no mapID is specified, the map choice popup is opened
+	* @see <code>Menu</code>
+	* 	* org.shoebox.biskwy.commands.menu.CommandOpenMap
 	* @author shoebox
 	*/
-	public class CommandOpenMap extends AbstractCommand implements ICommand {
+	public class CommandOpenMap extends AbstractCommand implements ICommand , ISingleton {
 		
 		protected var _oCONTENT		:CtntNewProject;
 		protected var _oBASE		:Database;
+		protected var _oMVC		:MVCCommand;
 		protected var _oFILE		:File;
-		protected var _oWINDOW		:NewProjectWindow;
-		protected var _uMAPID		:uint;
+		protected var _iMAPID		:int = -1;
+		protected var _oWINDOW		:MapsWindow;
 		
 		// -------o constructor
-		
-			public function CommandOpenMap( ) : void {
+			
+			/**
+			* Command constructor
+			* 
+			* @public
+			* @return	void
+			*/
+			public function CommandOpenMap( e : SingletonEnforcer ) : void {
 			}
 
 		// -------o public
 		
 			/**
-			* set mapID function
+			* Execution of the command
+			* 
 			* @public
-			* @param 
-			* @return
-			*/
-			public function set mapID( u : uint ) : void {
-				_uMAPID = u;
-			}
-		
-			/**
-			* onExecute function
-			* @public
-			* @param 
-			* @return
+			* @param	e : optional execute event (Event) 
+			* @return	void
 			*/
 			override public function onExecute( e : Event = null ) : void {
-				trc('openMap ::: '+_uMAPID);
-				
-				CommandProgress.getInstance().execute();
-				
-				var 	o : SGetMap = ServiceFactory.getService(SGetMap) as SGetMap;
-					o.mapID = _uMAPID;
-					o.addEventListener( ServiceEvent.ON_DATAS , _onResults , false , 10 , true );
-					o.call();
+				trc('openMap ::: '+_iMAPID);
+				_openWindow();
 			}
 			
 			/**
-			* onCancel function
+			* When the command is canceled
+			* 
 			* @public
-			* @param 
-			* @return
+			* @param	e : optional cancel event (Event)	 
+			* @return	void
 			*/
 			override public function onCancel( e : Event = null ) : void {
 			
 			}
 			
-		// -------o protected
-				
-				
 			/**
-			* 
-			*
+			* close function
+			* @public
 			* @param 
 			* @return
 			*/
-			protected function _onResults( e : ServiceEvent ) : void {
-				trc('onResult');
-				onComplete();
+			final public function close() : void {
+				_oMVC.cancel();
+				_oWINDOW.close();
 			}
 			
+		// -------o protected
+			
+			/**
+			* Open the map selection window
+			*
+			* @return	void
+			*/
+			final protected function _openWindow() : void {
+				trc('openWindow');
+				
+				// Freezing the app
+					Facade.getInstance().freeze();
+					
+				// Opening the window	
+					_oWINDOW = new MapsWindow();
+					_oWINDOW.addEventListener( Event.CLOSE , _onClosedWindow , false , 10 , true );
+					_oWINDOW.activate();
+				
+				// Executing the maps triad
+					_oMVC = new MVCCommand( { modelClass : MMaps , viewClass : VMaps , controllerClass : CMaps } );
+					_oMVC.container =  _oWINDOW.stage;
+					_oMVC.execute();
+			}
+			
+			/**
+			* When the map selection windows is closed manually
+			*
+			* @param 	e : event close (Event)
+			* @return	void
+			*/
+			final protected function _onClosedWindow( e : Event ) : void {
+				trc('_onClosedWindow');
+				Facade.getInstance().unfreeze();
+				cancel();
+			}
 			
 		// -------o misc
 
 			public static function trc(arguments : *) : void {
 				Logger.log(CommandOpenMap, arguments);
 			}
+			
+			/**
+			* Return the singleton instance of the class
+			* @public
+			* @return instance of the class (CommandOpenMap)
+			*/
+			static public function getInstance() : CommandOpenMap {				
+				if( !__instance )
+					__instance = new CommandOpenMap( new SingletonEnforcer() );
+								
+				return __instance;
+			}
+			
+		protected static var __instance		:CommandOpenMap = null;
 	}
 }
 
