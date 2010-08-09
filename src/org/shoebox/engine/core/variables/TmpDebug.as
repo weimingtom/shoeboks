@@ -1,7 +1,7 @@
 package org.shoebox.engine.core.variables {
-	import org.shoebox.engine.datas.CameraRef;
+	import flash.display.Bitmap;
 	/**
 	 * @author shoe[box]
 	 */
-	public var Camera : CameraRef;
+	public var TmpDebug : Bitmap;
 }

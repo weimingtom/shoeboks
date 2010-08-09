@@ -30,20 +30,16 @@
 */
 
 package org.shoebox.biskwy.commands.menu {
-	import org.shoebox.biskwy.commands.CommandProgress;
 	import org.shoebox.biskwy.controllers.CMaps;
 	import org.shoebox.biskwy.core.Database;
 	import org.shoebox.biskwy.core.Facade;
 	import org.shoebox.biskwy.models.MMaps;
-	import org.shoebox.biskwy.services.SGetMap;
 	import org.shoebox.biskwy.views.VMaps;
 	import org.shoebox.biskwy.windows.MapsWindow;
 	import org.shoebox.biskwy.windows.content.CtntNewProject;
 	import org.shoebox.patterns.commands.AbstractCommand;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.mvc.commands.MVCCommand;
-	import org.shoebox.patterns.service.ServiceEvent;
-	import org.shoebox.patterns.service.ServiceFactory;
 	import org.shoebox.patterns.singleton.ISingleton;
 	import org.shoebox.utils.logger.Logger;
 
@@ -74,6 +70,7 @@ package org.shoebox.biskwy.commands.menu {
 			* @return	void
 			*/
 			public function CommandOpenMap( e : SingletonEnforcer ) : void {
+				cancelable = false;
 			}
 
 		// -------o public
