@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><application xmlns="http://ns.adobe.com/air/application/1.5" minimumPatchLevel="0">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><application xmlns="http://ns.adobe.com/air/application/2.0" minimumPatchLevel="0">
 <!-- AIR Application Descriptor File. See http://www.adobe.com/go/learn_air_1.0_application_descriptor_en. -->
 	<id>Biskwy</id>
 	<name>Biskwy</name>
-	<version>0.3</version>
+	<version>0.3.1</version>
 	<filename>Biskwy</filename>
 	<description>
 		<text xml:lang="en">Biskwy map editor</text>		
@@ -26,7 +26,14 @@
 	</initialWindow>
 	<installFolder>Biskwy</installFolder>
 	<programMenuFolder>Biskwy</programMenuFolder>
-	
+	<!-- The icon the system uses for the application. For at least one resolution,
+     specify the path to a PNG file included in the AIR package. Optional. -->
+<icon>
+    <image16x16>assets/ICON_16.png</image16x16>
+    <image32x32>assets/ICON_32.png</image32x32>
+    <image48x48>assets/ICON_48.png</image48x48>
+    <image128x128>assets/ICON_128.png</image128x128>
+</icon>
 	<customUpdateUI>false</customUpdateUI>
 	<allowBrowserInvocation>false</allowBrowserInvocation>
 	<fileTypes>
