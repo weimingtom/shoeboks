@@ -3,5 +3,5 @@ package org.shoebox.engine.core.variables {
 	/**
 	 * @author shoe[box]
 	 */
-	//public var Dimension : Point = new Point( 12 , 9 );	public var Dimension : Point = new Point( 10 , 5 );		
+	//public var Dimension : Point = new Point( 12 , 9 );	public var Dimension : Point = new Point( 12 , 10 );		
 }

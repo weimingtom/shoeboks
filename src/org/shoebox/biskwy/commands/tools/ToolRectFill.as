@@ -209,6 +209,7 @@ package org.shoebox.biskwy.commands.tools {
 			* @return	void
 			*/
 			protected function _fill( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
+				/*
 				if(_bREPLACE)
 					g.clear();
 				
@@ -230,7 +231,7 @@ package org.shoebox.biskwy.commands.tools {
 						g.container.fill( _oTILEDESC );
 					
 				}
-				
+				*/
 						
 			}
 			

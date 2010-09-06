@@ -3,5 +3,5 @@ package org.shoebox.engine.core.variables {
 	/**
 	 * @author shoe[box]
 	 */
-	public var Position : Vector3D = new Vector3D( 10 , 7 , 0);
+	public var Position : Vector3D = new Vector3D( 12 , 28 , 0);
 }

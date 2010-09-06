@@ -29,7 +29,7 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package org.shoebox.biskwy.utils {
+package org.shoebox.engine.utils {
 	import org.shoebox.biskwy.core.Config;
 	import org.shoebox.utils.logger.Logger;
 
