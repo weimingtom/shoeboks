@@ -31,6 +31,7 @@
 
 package org.shoebox.biskwy.commands.tools {
 	import org.shoebox.biskwy.core.variables.CurrentMap;
+	import org.shoebox.biskwy.core.variables.TileSelection;
 	import org.shoebox.biskwy.events.GridTileEvent;
 	import org.shoebox.biskwy.items.GridTile;
 	import org.shoebox.biskwy.items.TileLayer;
@@ -168,12 +169,15 @@ package org.shoebox.biskwy.commands.tools {
 			* @return
 			*/
 			protected function _onEvent( e : GridTileEvent ) : void {
-				trc('onEvent ::: '+e.gridTile);
+				
 				if(!e.gridTile)
 					return;
+					
 				var v : Vector.<GridTile> = _getTiles(e.gridTile.position.x , e.gridTile.position.y, size);
+				
 				if(CurrentMap)
 					CurrentMap.out();
+					
 				switch(e.type){
 					
 					case GridTileEvent.GRIDTILE_OVER:
@@ -209,30 +213,30 @@ package org.shoebox.biskwy.commands.tools {
 			* @return	void
 			*/
 			protected function _fill( g : GridTile , u : uint , v : Vector.<GridTile> ) : void {
-				/*
+				trc('fill ::: '+multiSelectionLen);
+				
 				if(_bREPLACE)
 					g.clear();
 				
 				var 	l : uint = g.container.layers.length;
 				
-				if( multiSelectionLen > 0){
+				if( TileSelection.length > 0){
 					
-					var uID : uint = Math.random() * multiSelectionLen;
+					var uID : uint = Math.random() * TileSelection.length;
 					
 					if(inheritZ && g.container.layers.length > 0)
-						g.container.fill( multiSelection[uID] , (g.container.layers[l-1] as TileLayer).decalZ , true);					else
-						g.container.fill( multiSelection[uID] );
+						g.container.fill( TileSelection[uID] , (g.container.layers[l-1] as TileLayer).decalZ , true);					else
+						g.container.fill( TileSelection[uID] );
 				
-				}else if(_oTILEDESC){
+				}else if( TileSelection[0] ){
 					
 					if(inheritZ)
-						g.container.fill( _oTILEDESC , (g.container.layers[l-1] as TileLayer).decalZ , true);
+						g.container.fill( TileSelection[0] , (g.container.layers[l-1] as TileLayer).decalZ , true);
 					else
-						g.container.fill( _oTILEDESC );
+						g.container.fill( TileSelection[0] );
 					
 				}
-				*/
-						
+				
 			}
 			
 			

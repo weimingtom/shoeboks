@@ -1,0 +1,21 @@
+
+
+Events:
+	- Player spawned
+	- Level startup
+	- Level loaded
+
+Actors:
+	- Trigger
+		- Touched
+		- unTouched
+
+	
+
+
+Warp
+Delay
+Camera
+Click
+ActorPop
+MoveActor

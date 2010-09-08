@@ -30,7 +30,9 @@
 */
 
 package org.shoebox.biskwy.commands.tools {
+	import flash.ui.Keyboard;
 	import org.shoebox.biskwy.events.GridTileEvent;
+	import org.shoebox.engine.core.Keys;
 	import org.shoebox.events.EventCentral;
 	import org.shoebox.patterns.commands.ICommand;
 	import org.shoebox.patterns.singleton.ISingleton;
@@ -75,6 +77,7 @@ package org.shoebox.biskwy.commands.tools {
 			*/
 			final override public function onExecute( e : Event = null ) : void {
 				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false , 10 , true );
+				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_OVER, _onOver , false , 10 , true );
 			}
 			
 			/**
@@ -85,6 +88,7 @@ package org.shoebox.biskwy.commands.tools {
 			*/
 			final override public function onCancel( e : Event = null ) : void {
 				EventCentral.getInstance().removeEventListener( GridTileEvent.GRIDTILE_CLICK, _onClick , false );
+				EventCentral.getInstance().addEventListener( GridTileEvent.GRIDTILE_OVER, _onOver , false , 10 , true );
 				__instance = null;
 				_bISRUNNING = false;
 			}
@@ -99,6 +103,17 @@ package org.shoebox.biskwy.commands.tools {
 			*/
 			protected function _onClick( e : GridTileEvent ) : void {
 				e.gridTile.clear();						
+			}
+			
+			/**
+			* 
+			*
+			* @param 
+			* @return
+			*/
+			final protected function _onOver( e : GridTileEvent ) : void {
+				if( Keys.isDown(Keyboard.SPACE ))
+					e.gridTile.clear();	
 			}
 
 		// -------o misc
