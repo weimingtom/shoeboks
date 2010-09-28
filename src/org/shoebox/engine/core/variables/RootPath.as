@@ -1,5 +1,4 @@
 package org.shoebox.engine.core.variables {
-	import flash.filesystem.File;
 	/**
 	 * @author shoe[box]
 	 */
