@@ -30,7 +30,8 @@
 */
 
 package org.shoebox.engine.items.actors {
-	import flash.display.JointStyle;
+	import org.shoebox.engine.core.variables.PlayerSize;
+	import flash.geom.Rectangle;
 	import org.shoebox.engine.core.variables.Position2D;
 	import org.shoebox.engine.events.actorsEvents.TriggerEvents;
 	import org.shoebox.engine.interfaces.IActor;
@@ -39,6 +40,7 @@ package org.shoebox.engine.items.actors {
 
 	import flash.display.BlendMode;
 	import flash.display.CapsStyle;
+	import flash.display.JointStyle;
 	import flash.geom.Point;
 	
 	[NVM_Desc( type = 'Actor' , name = 'Trigger') ]
@@ -47,7 +49,7 @@ package org.shoebox.engine.items.actors {
 	[Event( name = "unTouched"	, type = "org.shoebox.engine.events.actorsEvents.TriggerEvents" , NVM_Output = 'true')]
 	
 	/**
-	* org.shoebox.engine.items.Trigger
+	* org.shoebox.engine.items.actors.Trigger
 	* @author shoebox
 	*/
 	public class Trigger extends AActor implements IActor , IMoveListener {
@@ -64,6 +66,7 @@ package org.shoebox.engine.items.actors {
 		
 		protected var _bTOUCHED			: Boolean = false;
 		protected var _ptPOSITION			: Point ;
+		protected var _oREC				: Rectangle;
 		protected var _uLINECOL			: uint = 0xFFFF00;
 		
 		// -------o constructor
@@ -107,19 +110,38 @@ package org.shoebox.engine.items.actors {
 			*/
 			final public function onMove() : void {
 				
-				var nDIS : Number = Point.distance( new Point( x , y ) , new Point(Position2D.x, Position2D.y));
-				var bINS : Boolean = ( nDIS < radius );
+				var b : Boolean = false;
 				
-				
-				if( !_bTOUCHED && bINS ){
-					trc('touched');
-					_bTOUCHED = true;
-					dispatchEvent(new TriggerEvents(TriggerEvents.Touched));
-				}else if( _bTOUCHED && !bINS ){
-					trc('unTouched');
-					_bTOUCHED = false;
-					dispatchEvent( new TriggerEvents( TriggerEvents.unTouched ) );
+				switch( shape ){
 					
+					case 'circle':
+						var nDIS : Number = Point.distance( new Point( x , y ) , new Point(Position2D.x, Position2D.y));
+						var bINS : Boolean = ( nDIS < radius );
+							
+						if( !_bTOUCHED && bINS )
+							b = true;
+						else if( _bTOUCHED && !bINS )
+							b = false;
+						else if( bINS )
+							b = true;
+					
+						break;
+						
+				case 'rectangle':
+					var 	oREC : Rectangle = PlayerSize.clone();
+						oREC.offset(Position2D.x, Position2D.y);
+					
+					var 	oREC2 : Rectangle = _oREC.clone();
+						oREC2.offsetPoint( _ptPOSITION );
+							
+					b = oREC.intersects( oREC2 );
+					
+					break;
+				}
+				
+				if( _bTOUCHED !== b ){
+					dispatchEvent(new TriggerEvents( b ? TriggerEvents.Touched : TriggerEvents.unTouched ));
+					_bTOUCHED = b;
 				}
 			}
 			
@@ -156,7 +178,9 @@ package org.shoebox.engine.items.actors {
 							break;
 							
 						case 'rectangle':
-							graphics.drawRect(-recWidth / 2 , -recHeight / 2 , recWidth , recHeight );
+							_oREC = new Rectangle( -recWidth / 2 , -recHeight / 2 , recWidth , recHeight );
+							graphics.drawRect(_oREC.x, _oREC.y, _oREC.width, _oREC.height);
+							_oREC.offset(_ptPOSITION.x, _ptPOSITION.y );
 							break;
 							
 					}

@@ -1,4 +1,6 @@
 package org.shoebox.biskwy.services {
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
 	import org.shoebox.biskwy.core.variables.ProjectDirectory;
 	import org.shoebox.patterns.service.IService;
 	import org.shoebox.utils.logger.Logger;
@@ -54,7 +56,7 @@ package org.shoebox.biskwy.services {
 				_oFILECOPY = ProjectDirectory.resolvePath('assets');
 				_oFILECOPY = _oFILECOPY.resolvePath(_oFILE.name);
 					
-				_oFILE.copyTo( _oFILECOPY );
+				_oFILE.copyTo( _oFILECOPY , true );
 				_oFILE.addEventListener(Event.COMPLETE , _onLoad , false , 10 , true);
 				_oFILE.load();
 			}
@@ -81,9 +83,12 @@ package org.shoebox.biskwy.services {
 			protected function _onLoad( e : Event ) : void {
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
 				
+				var 	oCONTEXT : LoaderContext = new LoaderContext( false ,  ApplicationDomain.currentDomain );
+					oCONTEXT.allowCodeImport = true;
+				
 				_oLOADER = new Loader();
 				_oLOADER.contentLoaderInfo.addEventListener( Event.COMPLETE , _onLoadContent , false , 10 , true );
-				_oLOADER.loadBytes( _oFILE.data );
+				_oLOADER.loadBytes( _oFILE.data , oCONTEXT );
 					
 			}
 			
