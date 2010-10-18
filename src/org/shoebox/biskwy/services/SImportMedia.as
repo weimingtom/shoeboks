@@ -1,10 +1,9 @@
 package org.shoebox.biskwy.services {
-	import flash.utils.ByteArray;
+	import org.shoebox.display.BoxBitmapData;
 	import flash.display.BitmapData;
 	import org.shoebox.biskwy.core.Config;
 	import org.shoebox.patterns.service.IService;
-	import org.shoebox.utils.logger.Logger;
-
+	
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.filesystem.File;
@@ -18,7 +17,7 @@ package org.shoebox.biskwy.services {
 	*/
 	public class SImportMedia extends SQLLiteService implements IService {
 		
-		protected var _oFILE			:File;
+		protected var _oFILE			:File;		protected var _oCOPY			:File;
 		protected var _oLOADER			:Loader;
 		
 		// -------o constructor
@@ -48,7 +47,6 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			final override public function onCall( ) : void {
-				trc('onCall ::: '+_oFILE);
 				_oFILE.addEventListener(Event.COMPLETE , _onLoad , false , 10 , true);
 				_oFILE.load();
 			}
@@ -73,14 +71,13 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			protected function _onLoad( e : Event ) : void {
-				trc('onLoad');
 				var oF : File = Config.PROJECTFILE.parent.resolvePath('assets');
 				if( !oF.exists )
 					oF.createDirectory();
 				
-				_oFILE.copyTo(oF.resolvePath(_oFILE.name));
+				_oCOPY = oF.resolvePath(_oFILE.name); 
+				_oFILE.copyTo( _oCOPY );
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
-				//'CREATE TABLE IF NOT EXISTS TB_Assets ( id INTEGER PRIMARY KEY , name TEXT , preview BLOB , filePath TEXT )';
 				
 				_oLOADER = new Loader();
 				_oLOADER.contentLoaderInfo.addEventListener( Event.COMPLETE , _onLoadComplete , false , 10 , true );
@@ -95,23 +92,24 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			final protected function _onLoadComplete( e : Event ) : void {
-				trace('_onLoadComplete');
 				var 	oB : BitmapData = new BitmapData( _oLOADER.width , _oLOADER.height , true );
 					oB.draw( _oLOADER );
-				
-				var 	oBA : ByteArray = new ByteArray();
-					oBA.writeObject( oB );
+					oB = BoxBitmapData.resize( oB , 250 , 250 , true , true );
 				
 				_oLOADER.contentLoaderInfo.removeEventListener( Event.COMPLETE , _onLoadComplete , false );
-				request = 'INSERT INTO TB_Assets ( name , filePath , preview ) VALUES ("'+_oFILE.name+'","'+_oFILE.nativePath+'",:byteArray)';
-				addParameter(':byteArray' , oB );
+				request = 'INSERT INTO TB_Assets ( name , filePath , preview ) VALUES ("'+_oCOPY.name+'","'+_oCOPY.nativePath+'",:mediavec)';
+				
+				var v : Vector.<uint> = oB.getVector( oB.rect );
+					v.unshift( oB.width , oB.height );
+				
+				addParameter(':mediavec' , v );
 				super.onCall();
 			}			
 			
 		// -------o misc
 
 			public static function trc(arguments : *) : void {
-				Logger.log(SImportMedia, arguments);
+				//Logger.log(SImportMedia, arguments);
 			}
 	}
 }
