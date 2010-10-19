@@ -12,7 +12,7 @@
 								if( e.type == Event.SELECT ){										var vSEL : Vector.<uint> = Vector.<uint>([ ]);					var a : AssetItem;
 					for each( a in _vSELECTED  ) {
 						vSEL.push( a.datas.iID);					}															switch( e.target ){						
-						case ( view as VAssetManager).menuDelete:							(model as MAssetManager).delAssets( vSEL );							break;													case (view as VAssetManager).menuConvertToTile:							(model as MAssetManager).convertAs( vSEL , 'tile' );							break;												}									}								if( e.type == KeyboardEvent.KEY_DOWN ){
+						case ( view as VAssetManager).menuDelete:							(model as MAssetManager).delAssets( vSEL );							break;													case (view as VAssetManager).menuConvertToTile:							(model as MAssetManager).convertAs( vSEL , 'Tile' );							break;												}									}								if( e.type == KeyboardEvent.KEY_DOWN ){
 										if( (e as KeyboardEvent).keyCode == Keyboard.SHIFT )						_bMULTISEL = true;
 										if( (e as KeyboardEvent).keyCode == Keyboard.CONTROL  )
 						_bCTRL = true;												return;				}								if( e.type == KeyboardEvent.KEY_UP ){										if( (e as KeyboardEvent).keyCode == Keyboard.SHIFT )						_bMULTISEL = false;											if( (e as KeyboardEvent).keyCode == Keyboard.CONTROL  )						_bCTRL = false;											return;				}								if( e.target is AssetItem ){										var o : AssetItem = e.target as AssetItem;										switch( e.type ){						
