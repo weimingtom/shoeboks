@@ -74,14 +74,30 @@ package org.shoebox.biskwy.services {
 				var oF : File = Config.PROJECTFILE.parent.resolvePath('assets');
 				if( !oF.exists )
 					oF.createDirectory();
-				
+				trace('_oFILE.name ::: '+_oFILE.name);
 				_oCOPY = oF.resolvePath(_oFILE.name); 
 				_oFILE.copyTo( _oCOPY );
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
 				
-				_oLOADER = new Loader();
-				_oLOADER.contentLoaderInfo.addEventListener( Event.COMPLETE , _onLoadComplete , false , 10 , true );
-				_oLOADER.loadBytes( _oFILE.data );
+				var oB : BitmapData;
+				switch( _oFILE.name.split('.')[1] ){
+					
+					case 'jpg':					case 'jpeg':
+					case 'png':
+					case 'swf':
+						_oLOADER = new Loader();
+						_oLOADER.contentLoaderInfo.addEventListener( Event.COMPLETE , _onLoadComplete , false , 10 , true );
+						_oLOADER.loadBytes( _oFILE.data );
+						break;
+					
+					case 'mp3':
+						oB = new BitmapData( 125 , 125 , false , 0x0AB6F3 );
+						_push( oB , 'SoundAsset' );
+						break;
+					
+				}
+				
+				
 				
 			}	
 			
@@ -92,19 +108,32 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			final protected function _onLoadComplete( e : Event ) : void {
+				_oLOADER.contentLoaderInfo.removeEventListener( Event.COMPLETE , _onLoadComplete , false );
+				
 				var 	oB : BitmapData = new BitmapData( _oLOADER.width , _oLOADER.height , true );
 					oB.draw( _oLOADER );
 					oB = BoxBitmapData.resize( oB , 250 , 250 , true , true );
 				
-				_oLOADER.contentLoaderInfo.removeEventListener( Event.COMPLETE , _onLoadComplete , false );
-				request = 'INSERT INTO TB_Assets ( name , filePath , preview ) VALUES ("'+_oCOPY.name+'","'+_oCOPY.nativePath+'",:mediavec)';
+				_push( oB );
+			}			
+
+			/**
+			* Pushing a new asset
+			*
+			* @param 	oB : preview bitmapdata		
+			* @return	void
+			*/
+			final protected function _push( oB : BitmapData , sType : String = 'Asset' ) : void {
+				trace('push ::: '+oB);
+				
+				request = 'INSERT INTO TB_Assets ( name , filePath , type , preview  ) VALUES ("'+_oCOPY.name+'","'+_oCOPY.nativePath+'","'+sType+'",:mediavec)';
 				
 				var v : Vector.<uint> = oB.getVector( oB.rect );
 					v.unshift( oB.width , oB.height );
 				
 				addParameter(':mediavec' , v );
 				super.onCall();
-			}			
+			}
 			
 		// -------o misc
 
