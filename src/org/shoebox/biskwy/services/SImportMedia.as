@@ -1,4 +1,7 @@
 package org.shoebox.biskwy.services {
+	import flash.events.SQLEvent;
+	import org.shoebox.biskwy.core.DatabaseAssets;
+	import org.shoebox.patterns.service.AbstractService;
 	import org.shoebox.display.BoxBitmapData;
 	import flash.display.BitmapData;
 	import org.shoebox.biskwy.core.Config;
@@ -15,17 +18,19 @@ package org.shoebox.biskwy.services {
 	* org.shoebox.biskwy.services.SImportMedia
 	* @author shoebox
 	*/
-	public class SImportMedia extends SQLLiteService implements IService {
+	public class SImportMedia extends AbstractService implements IService {
 		
-		protected var _oFILE			:File;		protected var _oCOPY			:File;
-		protected var _oLOADER			:Loader;
+		protected var _oFILE			: File;
+		protected var _oBMP			: BitmapData;		protected var _sTYPE			: String;		protected var _oCOPY			: File;
+		protected var _oLOADER			: Loader;
+		protected var _oBASE			: DatabaseAssets;
 		
 		// -------o constructor
 		
 			public function SImportMedia( ) : void {
 				trc('constructor');
 				super();
-				request = 'SELECT DISTINCT cat FROM TilesDB';
+				//request = 'SELECT DISTINCT cat FROM TilesDB';
 			}
 
 		// -------o public
@@ -74,7 +79,7 @@ package org.shoebox.biskwy.services {
 				var oF : File = Config.PROJECTFILE.parent.resolvePath('assets');
 				if( !oF.exists )
 					oF.createDirectory();
-				trace('_oFILE.name ::: '+_oFILE.name);
+				
 				_oCOPY = oF.resolvePath(_oFILE.name); 
 				_oFILE.copyTo( _oCOPY );
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
@@ -91,7 +96,7 @@ package org.shoebox.biskwy.services {
 						break;
 					
 					case 'mp3':
-						oB = new BitmapData( 125 , 125 , false , 0x0AB6F3 );
+						oB = new BitmapData( 125 , 125 , false , 0x0000FF );
 						_push( oB , 'SoundAsset' );
 						break;
 					
@@ -114,8 +119,11 @@ package org.shoebox.biskwy.services {
 					oB.draw( _oLOADER );
 					oB = BoxBitmapData.resize( oB , 250 , 250 , true , true );
 				
+				
 				_push( oB );
 			}			
+			
+			
 
 			/**
 			* Pushing a new asset
@@ -125,14 +133,57 @@ package org.shoebox.biskwy.services {
 			*/
 			final protected function _push( oB : BitmapData , sType : String = 'Asset' ) : void {
 				trace('push ::: '+oB);
+				_oBMP = oB;
+				_sTYPE = sType;
+				_initBase();
 				
-				request = 'INSERT INTO TB_Assets ( name , filePath , type , preview  ) VALUES ("'+_oCOPY.name+'","'+_oCOPY.nativePath+'","'+sType+'",:mediavec)';
+			}
+			
+			/**
+			* 
+			*
+			* @param 
+			* @return
+			*/
+			final protected function _initBase() : void {
+				_oBASE = new DatabaseAssets( );
+				_oBASE.addEventListener( Event.OPEN , _onOpened , false , 10 , true );
+				_oBASE.init( );
+			}
+			
+			/**
+			* 
+			*
+			* @param 
+			* @return
+			*/
+			final protected function _onOpened( e : Event ) : void {
+				trc('onOpened');
 				
-				var v : Vector.<uint> = oB.getVector( oB.rect );
-					v.unshift( oB.width , oB.height );
 				
-				addParameter(':mediavec' , v );
-				super.onCall();
+				var v : Vector.<uint> = _oBMP.getVector( _oBMP.rect );
+					v.unshift( _oBMP.width , _oBMP.height );
+				
+				var 	oP : Object = {};
+					oP[':mediavec'] = v;
+
+				_oBASE.removeEventListener( Event.OPEN , _onOpened , false );
+				_oBASE.addEventListener( SQLEvent.RESULT , _onResults , false , 10 , true );
+				_oBASE.call('INSERT INTO TB_Assets ( name , filePath , type , preview  ) VALUES ("'+_oCOPY.name+'","'+_oCOPY.nativePath+'","'+_sTYPE+'",:mediavec)' , oP );
+			}
+			
+			/**
+			* 
+			*
+			* @param 
+			* @return
+			*/
+			final protected function _onResults( e : SQLEvent ) : void {
+				trc('onResults ::: ' + e );
+				
+				_oBASE.removeEventListener(SQLEvent.RESULT , _onResults , false );
+				_oBASE.close( );
+				onComplete( );
 			}
 			
 		// -------o misc
