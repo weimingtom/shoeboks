@@ -3,5 +3,5 @@ package org.shoebox.biskwy.core.variables {
 	/**
 	 * @author shoe[box]
 	 */
-	public var TilesCache : TilesCacher = new TilesCacher(true);
+	public var TilesCache : TilesCacher;
 }

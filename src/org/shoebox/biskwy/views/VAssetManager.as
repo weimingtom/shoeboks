@@ -23,11 +23,11 @@
 					_oSCROLL.source = _spCONTAINER;
 					_oSCROLL.horizontalScrollPolicy = ScrollPolicy.OFF;					addChild( _oSCROLL );					_oSCROLL.update();								addEventListener( Event.ADDED_TO_STAGE , _onStaged , false , 10 , true );			}						/**			* When the view receive an update			* 			* @public			* @param	o : optional update event (UpdateEvent) 			* @return	void			*/			override final public function update(o:UpdateEvent = null) : void {				_align();			}												/**			* When the view is canceled			* 			* @public			* @param	e : optional cancel event (Event) 			* @return	void			*/			override final public function cancel(e:Event = null) : void {				with( controller ){					unRegisterGateway( btnImport, MouseEvent.CLICK , (model as MAssetManager).importMedia , false );					unRegister(_oMENU		, Event.SELECT 			, false );					unRegister(_spCONTAINER	, MouseEvent.MOUSE_OVER	, true );					unRegister(_spCONTAINER	, MouseEvent.MOUSE_OUT	, true );					unRegister(_spCONTAINER	, MouseEvent.CLICK		, true );				}			}						/**			* addItem function			* @public			* @param 			* @return			*/
 			final public function addItem(o : MediaDesc) : void {
-				trc('addItem ::: '+o.iID);				trace('_oCONTENT_HASH.containsKey(o.iID) ::: '+_oCONTENT_HASH.containsKey(o.iID));				if( !_vCONTENT )					_vCONTENT = new Vector.<AssetItem>();
-								if( _oCONTENT_HASH.containsKey(o.iID) )					return;				trace('do item ::: '+o);				var 	a : AssetItem = new AssetItem();
+												if( !_vCONTENT )					_vCONTENT = new Vector.<AssetItem>();
+								if( _oCONTENT_HASH.containsKey(o.iID) )					return;								var 	a : AssetItem = new AssetItem();
 					a.datas = o;
 					a.id = o.iID;
-					a.redraw();					a.contextMenu = _oMENU;					a.type = o.sType;				trace('a.contextMenu ::: '+a.contextMenu);				_spCONTAINER.addChild( a );
+					a.redraw();					a.contextMenu = _oMENU;					a.type = o.sType;								_spCONTAINER.addChild( a );
 				_vCONTENT.push(a);
 				_oCONTENT_HASH.addItem(o.iID , a );			}						/**			* removeItem function			* @public			* @param 			* @return			*/
 			final public function removeItem(o : MediaDesc) : void {								if( !_oCONTENT_HASH.containsKey(o.iID) )					return;				
