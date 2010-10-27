@@ -21,8 +21,7 @@
 				register(view , KeyboardEvent.KEY_DOWN , false , 10 , true );				register(view , KeyboardEvent.KEY_UP	, false , 10 , true );			}			/**			* When the controller receive an event 			* 			* @public			* @param	e : received event (Event) 			* @return	void			*/			final override public function onEvent( e : Event ) : void {
 								if( e.type == MouseEvent.DOUBLE_CLICK){										var 	oA7 : AssetItem =  (e.target as AssetItem);										if( oA7.type !== 'Tile' )						return;						
 					var 	oEVENT : TileEvent = new TileEvent(TileEvent.EDIT );						oEVENT.tileID = oA7.id;										var 	oCOM : CommandEditTile = CommandEditTile.getInstance();						oCOM.execute( oEVENT );										return;				}								if( e.type == Event.SELECT ){										var vSEL : Vector.<uint> = Vector.<uint>([ ]);					var a : AssetItem;
-					for each( a in _vSELECTED  ){						 
-						vSEL.push(a.datas.iID);					}																				var sNEW : String;					switch( e.target ){						
+					for each( a in _vSELECTED  ){						vSEL.push(a.datas.iID);					}																				var sNEW : String;					switch( e.target ){						
 						case ( view as VAssetManager).menuDelete:							(model as MAssetManager).delAssets( vSEL );							break;													case (view as VAssetManager).menuConvertToTile:							(model as MAssetManager).convertAs( vSEL , 'Tile' );							sNEW = 'Tile';							break;							
 						case (view as VAssetManager).menuConvertToBmpAsset:							(model as MAssetManager).convertAs( vSEL , 'Bitmap asset' );							break;												}										if( sNEW !== null ){						for each( a in _vSELECTED  ) 							a.datas.sType = sNEW;					}																			}								if( e.type == KeyboardEvent.KEY_DOWN ){
 										if( (e as KeyboardEvent).keyCode == Keyboard.SHIFT )						_bMULTISEL = true;
@@ -36,7 +35,7 @@
 								TileSelection = new Vector.<TileDesc>( [] );								var oAsset : AssetItem;
 								for each( oAsset in _vSELECTED ) {
 								if( oAsset.datas.sType == 'Tile') {
-									trace('oAsset.id ::: ' + oAsset.datas.iID + ' /// ' + oAsset.id);
+										trace('oAsset.id ::: ' + oAsset.datas.iID + ' /// ' + oAsset.id);
 										TileSelection.push(TilesCache.getValue(oAsset.id));									}								}																trace('TileSelection ::: '+TileSelection);							break;											}				}			}												/**			* When the controller is canceled			* 			* @public			* @param	e : optional cance event (Event) 			* @return	void			*/			final override public function cancel( e : Event = null ) : void {							}				// -------o protected					/**			* 			*			* @param 			* @return			*/			final protected function _select( s : uint , e : uint , o : DisplayObjectContainer ) : void {				trace('select ::: '+s+' /// '+e );								var t : uint = s;				if( s > e ){					t = e;										e = s;					s = t;				}								var i : uint = s;				var a : AssetItem;				for( i ; i <= e ; i++ ){										a = o.getChildByName(i+'') as AssetItem;					a.selected();					_vSELECTED.push( a );				}							}					/**			* 			*			* @param 			* @return			*/
 			final protected function _deselect( ) : void {
 									var o : AssetItem;

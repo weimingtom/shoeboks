@@ -52,7 +52,7 @@ package org.shoebox.biskwy.services {
 			* @return
 			*/
 			final override public function onCall( ) : void {
-				
+				trc('onCall');
 				_oFILECOPY = ProjectDirectory.resolvePath('assets');
 				_oFILECOPY = _oFILECOPY.resolvePath(_oFILE.name);
 					

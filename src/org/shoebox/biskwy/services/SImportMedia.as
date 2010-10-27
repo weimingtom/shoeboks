@@ -1,4 +1,6 @@
 package org.shoebox.biskwy.services {
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
 	import org.shoebox.biskwy.core.Config;
 	import org.shoebox.biskwy.core.DatabaseAssets;
 	import org.shoebox.display.BoxBitmapData;
@@ -93,9 +95,13 @@ package org.shoebox.biskwy.services {
 					case 'jpg':					case 'jpeg':
 					case 'png':
 					case 'swf':
+					
+						var 	c : LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
+							c.allowCodeImport = true;
+					
 						_oLOADER = new Loader();
 						_oLOADER.contentLoaderInfo.addEventListener( Event.COMPLETE , _onLoadComplete , false , 10 , true );
-						_oLOADER.loadBytes( _oFILE.data );
+						_oLOADER.loadBytes( _oFILE.data , c );
 						break;
 					
 					case 'mp3':
