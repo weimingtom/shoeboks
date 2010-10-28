@@ -1,6 +1,5 @@
 package org.shoebox.biskwy.services {
-	import flash.system.ApplicationDomain;
-	import flash.system.LoaderContext;
+	import mx.core.BitmapAsset;
 	import org.shoebox.biskwy.core.Config;
 	import org.shoebox.biskwy.core.DatabaseAssets;
 	import org.shoebox.display.BoxBitmapData;
@@ -10,9 +9,12 @@ package org.shoebox.biskwy.services {
 
 	import flash.display.BitmapData;
 	import flash.display.Loader;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
 
 	/**
 	* Service who permit to import a new Tile in to the tiles Libray
@@ -22,6 +24,9 @@ package org.shoebox.biskwy.services {
 	* @author shoebox
 	*/
 	public class SImportMedia extends AbstractService implements IService {
+		
+		[Embed(source="C:\\Users\\Johann\\workspace\\BISKWY\\res\\mediaSound.jpg")]
+		protected var _cMEDIASND		: Class;
 		
 		protected var _oFILE			: File;
 		protected var _oBMP			: BitmapData;		protected var _sTYPE			: String;		protected var _oCOPY			: File;
@@ -86,7 +91,8 @@ package org.shoebox.biskwy.services {
 					oF.createDirectory();
 				
 				_oCOPY = oF.resolvePath(_oFILE.name); 
-				_oFILE.copyTo( _oCOPY );
+				if( !_oCOPY.exists )
+					_oFILE.copyTo( _oCOPY );
 				_oFILE.removeEventListener(Event.COMPLETE , _onLoad , false);
 				
 				var oB : BitmapData;
@@ -105,8 +111,7 @@ package org.shoebox.biskwy.services {
 						break;
 					
 					case 'mp3':
-						oB = new BitmapData( 125 , 125 , false , 0x0000FF );
-						_push( oB , 'SoundAsset' );
+						_push( (new _cMEDIASND() as BitmapAsset).bitmapData , 'SoundAsset' );
 						break;
 					
 				}
@@ -124,7 +129,7 @@ package org.shoebox.biskwy.services {
 			final protected function _onLoadComplete( e : Event ) : void {
 				_oLOADER.contentLoaderInfo.removeEventListener( Event.COMPLETE , _onLoadComplete , false );
 				
-				var 	oB : BitmapData = new BitmapData( _oLOADER.width , _oLOADER.height , true );
+				var 	oB : BitmapData = new BitmapData( _oLOADER.width , _oLOADER.height , true , 0 );
 					oB.draw( _oLOADER );
 					oB = BoxBitmapData.resize( oB , 250 , 250 , true , true );
 				
