@@ -1,0 +1,1 @@
+![http://vegas.googlecode.com/svn/gfx/FDT_Supported.png](http://vegas.googlecode.com/svn/gfx/FDT_Supported.png)
